@@ -1,12 +1,13 @@
 package com.ddarahakit.web.user.service;
 
+import com.ddarahakit.web.exception.ErrorCode;
+import com.ddarahakit.web.exception.exception.MemberException;
 import com.ddarahakit.web.user.model.User;
 import com.ddarahakit.web.user.model.request.PostSignupReq;
 import com.ddarahakit.web.user.model.response.PostSignupRes;
 import com.ddarahakit.web.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,8 +20,7 @@ public class UserService {
         Optional<User> result = userRepository.findByEmail(request.getEmail());
 
         if (result.isPresent()) {
-            System.out.println("중복된 이메일 존재");
-            return null;
+            throw new MemberException(ErrorCode.DUPLICATED_USER, String.format("email is %s", request.getEmail()));
         }
 
         User user = User.builder()
