@@ -6,6 +6,8 @@ import com.ddarahakit.web.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,8 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     private final UserService userService;
     @ApiOperation(value = "회원가입")
     @RequestMapping(method = RequestMethod.POST, value = "/signup")

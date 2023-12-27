@@ -1,6 +1,8 @@
 package com.ddarahakit.web.exception;
 
 import com.ddarahakit.web.exception.exception.MemberException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +14,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 public class GlobalExceptionAdvise extends ResponseEntityExceptionHandler {
+    private final Logger log = LoggerFactory.getLogger(GlobalExceptionAdvise.class);
     @ExceptionHandler(MemberException.class)
     public ResponseEntity handleMemberException(MemberException e) {
-        System.out.println(e.getMessage());
+        log.error("MemberException : [{}] - {}", e.getErrorCode().getStatus(), e.getMessage());
         return makeResponseEntity(e.getErrorCode());
     }
 
