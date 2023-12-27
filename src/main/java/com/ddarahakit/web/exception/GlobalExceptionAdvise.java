@@ -1,5 +1,6 @@
 package com.ddarahakit.web.exception;
 
+import com.ddarahakit.web.exception.exception.CourseException;
 import com.ddarahakit.web.exception.exception.MemberException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,12 @@ public class GlobalExceptionAdvise extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MemberException.class)
     public ResponseEntity handleMemberException(MemberException e) {
         log.error("MemberException : [{}] - {}", e.getErrorCode().getStatus(), e.getMessage());
+        return makeResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(CourseException.class)
+    public ResponseEntity handleCourseException(CourseException e) {
+        log.error("CourseException : [{}] - {}", e.getErrorCode().getStatus(), e.getMessage());
         return makeResponseEntity(e.getErrorCode());
     }
 

@@ -3,10 +3,18 @@ package com.ddarahakit.web.exception;
 import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
+    // 공통 에러 코드
+    INVALID_INPUT(HttpStatus.BAD_REQUEST, "입력값이 잘못되었습니다.."),
+    
+    // 사용자 관련 에러 코드
     DUPLICATED_USER(HttpStatus.CONFLICT, "이미 존재하는 사용자입니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 토큰입니다."),
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
-    INVALID_INPUT(HttpStatus.BAD_REQUEST, "입력값이 잘못되었습니다.."),
+    
+
+    // 코스 관련 에러 코드
+    DUPLICATED_COURSE(HttpStatus.CONFLICT, "중복된 코스 이름이 존재합니다."),
+
     ;
 
     public HttpStatus getStatus() {
