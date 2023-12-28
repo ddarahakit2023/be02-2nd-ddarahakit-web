@@ -52,5 +52,4 @@ build/
 ### VS Code ###
 .vscode/
 
-### Config File ###
-*.yml
+
