@@ -1,6 +1,8 @@
 package com.ddarahakit.web.user.controller;
 
+import com.ddarahakit.web.user.model.request.PostEditUserProfileImageReq;
 import com.ddarahakit.web.user.model.request.PostSignupReq;
+import com.ddarahakit.web.user.model.request.PutEditUserProfileReq;
 import com.ddarahakit.web.user.model.response.PostSignupRes;
 import com.ddarahakit.web.user.service.UserService;
 import io.swagger.annotations.Api;
@@ -9,10 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -24,10 +24,25 @@ public class UserController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final UserService userService;
+
     @ApiOperation(value = "회원가입")
     @RequestMapping(method = RequestMethod.POST, value = "/signup")
     public ResponseEntity signup(@Valid @RequestBody PostSignupReq request) {
         PostSignupRes response = userService.signup(request);
         return ResponseEntity.ok().body(response);
+    }
+
+    @ApiOperation(value = "회원 프로필 정보 수정")
+    @RequestMapping(method = RequestMethod.PUT, value = "/edit/profile")
+    public ResponseEntity editUserProfile(@Valid @RequestBody PutEditUserProfileReq request) {
+        userService.editUserProfile(request);
+        return ResponseEntity.ok().body("");
+    }
+
+    @ApiOperation(value = "회원 프로필 이미지 수정")
+    @RequestMapping(method = RequestMethod.POST, value = "/edit/profile/image")
+    public ResponseEntity editUserProfileImage(PostEditUserProfileImageReq request) {
+        userService.editUserProfileImage(request);
+        return ResponseEntity.ok().body("");
     }
 }

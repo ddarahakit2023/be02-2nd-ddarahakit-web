@@ -38,6 +38,9 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 30)
     private String name;
 
+    @Column(length = 200, unique = true)
+    private String profileImage;
+
     @ColumnDefault("'ROLE_USER'")
     @Column(nullable = false)
     private String authority;
