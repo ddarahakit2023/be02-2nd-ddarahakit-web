@@ -3,7 +3,9 @@ package com.ddarahakit.web.user.controller;
 import com.ddarahakit.web.user.model.request.PostEditUserProfileImageReq;
 import com.ddarahakit.web.user.model.request.PostSignupReq;
 import com.ddarahakit.web.user.model.request.PutEditUserProfileReq;
+import com.ddarahakit.web.user.model.response.PostEditUserProfileImageRes;
 import com.ddarahakit.web.user.model.response.PostSignupRes;
+import com.ddarahakit.web.user.model.response.PutEditUserProfileRes;
 import com.ddarahakit.web.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,14 +37,14 @@ public class UserController {
     @ApiOperation(value = "회원 프로필 정보 수정")
     @RequestMapping(method = RequestMethod.PUT, value = "/edit/profile")
     public ResponseEntity editUserProfile(@Valid @RequestBody PutEditUserProfileReq request) {
-        userService.editUserProfile(request);
-        return ResponseEntity.ok().body("");
+        PutEditUserProfileRes response = userService.editUserProfile(request);
+        return ResponseEntity.ok().body(response);
     }
 
     @ApiOperation(value = "회원 프로필 이미지 수정")
     @RequestMapping(method = RequestMethod.POST, value = "/edit/profile/image")
     public ResponseEntity editUserProfileImage(PostEditUserProfileImageReq request) {
-        userService.editUserProfileImage(request);
-        return ResponseEntity.ok().body("");
+        PostEditUserProfileImageRes response = userService.editUserProfileImage(request);
+        return ResponseEntity.ok().body(response);
     }
 }

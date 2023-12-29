@@ -7,7 +7,9 @@ import com.ddarahakit.web.user.model.User;
 import com.ddarahakit.web.user.model.request.PostEditUserProfileImageReq;
 import com.ddarahakit.web.user.model.request.PostSignupReq;
 import com.ddarahakit.web.user.model.request.PutEditUserProfileReq;
+import com.ddarahakit.web.user.model.response.PostEditUserProfileImageRes;
 import com.ddarahakit.web.user.model.response.PostSignupRes;
+import com.ddarahakit.web.user.model.response.PutEditUserProfileRes;
 import com.ddarahakit.web.user.repository.UserRepository;
 import com.ddarahakit.web.utils.ImageUtils;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +45,7 @@ public class UserService {
     }
 
 
-    public void editUserProfile(PutEditUserProfileReq request) {
+    public PutEditUserProfileRes editUserProfile(PutEditUserProfileReq request) {
         Optional<User> result = userRepository.findById(request.getId());
 
         if(result.isPresent()) {
@@ -58,11 +60,15 @@ public class UserService {
                 user.setPassword(request.getPassword());
             }
 
-            userRepository.save(user);
+            user = userRepository.save(user);
+
+            return PutEditUserProfileRes.toDto(user);
         }
+        return null;
+
     }
 
-    public void editUserProfileImage(PostEditUserProfileImageReq request) {
+    public PostEditUserProfileImageRes editUserProfileImage(PostEditUserProfileImageReq request) {
         Optional<User> result = userRepository.findById(request.getId());
 
         if(result.isPresent()) {
@@ -76,7 +82,9 @@ public class UserService {
                 throw new MemberException(ErrorCode.PROFILE_IMAGE_EMPTY);
             }
 
-            userRepository.save(user);
+            user = userRepository.save(user);
+            return PostEditUserProfileImageRes.toDto(user);
         }
+        return null;
     }
 }
