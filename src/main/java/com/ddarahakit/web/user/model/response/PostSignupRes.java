@@ -11,4 +11,5 @@ import lombok.Getter;
 public class PostSignupRes {
     private Long id;
     private String email;
+    private String name;
 }
