@@ -1,15 +1,17 @@
 package com.ddarahakit.web.course.service;
 
 import com.ddarahakit.web.course.model.Course;
+import com.ddarahakit.web.course.model.Lecture;
+import com.ddarahakit.web.course.model.Section;
 import com.ddarahakit.web.course.model.request.PostCourseReq;
+import com.ddarahakit.web.course.model.request.PostLectureReq;
+import com.ddarahakit.web.course.model.request.PostSectionReq;
 import com.ddarahakit.web.course.model.response.PostCourseRes;
 import com.ddarahakit.web.course.repository.CourseRepository;
+import com.ddarahakit.web.course.repository.LectureRepository;
+import com.ddarahakit.web.course.repository.SectionRepository;
 import com.ddarahakit.web.exception.ErrorCode;
 import com.ddarahakit.web.exception.exception.CourseException;
-import com.ddarahakit.web.exception.exception.MemberException;
-import com.ddarahakit.web.user.model.User;
-import com.ddarahakit.web.user.model.request.PostSignupReq;
-import com.ddarahakit.web.user.model.response.PostSignupRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,8 @@ import java.util.Optional;
 @Service
 public class CourseService {
     private final CourseRepository courseRepository;
-
+    private final SectionRepository sectionRepository;
+    private final LectureRepository lectureRepository;
 
     public PostCourseRes createCourse(PostCourseReq request) {
         Optional<Course> result = courseRepository.findByName(request.getName());
@@ -37,6 +40,27 @@ public class CourseService {
 
         course = courseRepository.save(course);
 
+        if (request.getSections() != null) {
+            for (PostSectionReq postSectionReq : request.getSections()) {
+                Section section = Section.builder()
+                        .name(postSectionReq.getName())
+                        .course(course)
+                        .build();
+                sectionRepository.save(section);
+                if (postSectionReq.getLectures() != null) {
+                    for (PostLectureReq postLectureReq : postSectionReq.getLectures()) {
+                        Lecture lecture = Lecture.builder()
+                                .name(postLectureReq.getName())
+                                .playTime(postLectureReq.getPlayTime())
+                                .videoUrl(postLectureReq.getVideoUrl())
+                                .section(section)
+                                .build();
+                        lectureRepository.save(lecture);
+                    }
+                }
+
+            }
+        }
         return PostCourseRes.builder()
                 .id(course.getId())
                 .name(course.getName())

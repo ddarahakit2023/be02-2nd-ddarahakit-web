@@ -19,6 +19,7 @@ public class SwaggerConfig {
                 .select()
                 .apis(
                         RequestHandlerSelectors.basePackage("com.ddarahakit.web.user")
+                                .or(RequestHandlerSelectors.basePackage("com.ddarahakit.web.course"))
                 )
                 .paths(PathSelectors.any())
                 .build()
