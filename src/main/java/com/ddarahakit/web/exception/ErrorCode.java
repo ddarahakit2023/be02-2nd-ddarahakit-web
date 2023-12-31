@@ -14,6 +14,7 @@ public enum ErrorCode {
     PROFILE_IMAGE_EMPTY(HttpStatus.UNAUTHORIZED, "사진을 첨부해주세요."),
 
 
+    // TODO: 코스, 섹션, 강의 추가시 발생할 수 있는 에러 코드 추가할 것
     // 코스 관련 에러 코드
     DUPLICATED_COURSE(HttpStatus.CONFLICT, "중복된 코스 이름이 존재합니다."),
 
