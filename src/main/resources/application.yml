@@ -1,23 +1,52 @@
 
+jwt:
+  secret-key: ${JWT_SECRET}
+  token:
+    expired-time-ms: ${JWT_EXPIRED_TIME}
+
+
+imp:
+  imp_key: ${IAMPORT_KEY}
+  imp_secret: ${IAMPORT_SECRET}
+
+
 spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
   datasource:
-    url: jdbc:mysql://${DB_ADDR}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USER}
-    password: ${DB_PASS}
-    driver-class-name: ${DB_DRIVER}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME}
 
   jpa:
+    open-in-view: false
     database: mysql
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     show-sql: true
+
 
 cloud:
   aws:
@@ -31,3 +60,8 @@ cloud:
       auto: false
     stack:
       auto: false
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG

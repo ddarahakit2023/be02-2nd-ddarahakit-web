@@ -5,14 +5,24 @@ import com.ddarahakit.web.exception.ErrorCode;
 import com.ddarahakit.web.exception.exception.MemberException;
 import com.ddarahakit.web.user.model.User;
 import com.ddarahakit.web.user.model.request.PostEditUserProfileImageReq;
+import com.ddarahakit.web.user.model.request.PostLoginReq;
 import com.ddarahakit.web.user.model.request.PostSignupReq;
 import com.ddarahakit.web.user.model.request.PutEditUserProfileReq;
 import com.ddarahakit.web.user.model.response.PostEditUserProfileImageRes;
+import com.ddarahakit.web.user.model.response.PostLoginRes;
 import com.ddarahakit.web.user.model.response.PostSignupRes;
 import com.ddarahakit.web.user.model.response.PutEditUserProfileRes;
 import com.ddarahakit.web.user.repository.UserRepository;
 import com.ddarahakit.web.utils.ImageUtils;
+import com.ddarahakit.web.utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,7 +31,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
     private final S3Service s3Service;
+
     public PostSignupRes signup(PostSignupReq request) {
         Optional<User> result = userRepository.findByEmail(request.getEmail());
 
@@ -32,7 +45,7 @@ public class UserService {
         User user = User.builder()
                 .email(request.getEmail())
                 .name(request.getName())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
         user = userRepository.save(user);
@@ -48,15 +61,15 @@ public class UserService {
     public PutEditUserProfileRes editUserProfile(PutEditUserProfileReq request) {
         Optional<User> result = userRepository.findById(request.getId());
 
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             User user = result.get();
-            if(request.getEmail() != null) {
+            if (request.getEmail() != null) {
                 user.setEmail(request.getEmail());
             }
-            if(request.getName() != null) {
+            if (request.getName() != null) {
                 user.setName(request.getName());
             }
-            if(request.getPassword() != null) {
+            if (request.getPassword() != null) {
                 user.setPassword(request.getPassword());
             }
 
@@ -71,10 +84,10 @@ public class UserService {
     public PostEditUserProfileImageRes editUserProfileImage(PostEditUserProfileImageReq request) {
         Optional<User> result = userRepository.findById(request.getId());
 
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             User user = result.get();
 
-            if(request.getImage() != null) {
+            if (request.getImage() != null) {
                 String savePath = ImageUtils.makeImagePath(request.getImage().getOriginalFilename());
                 savePath = s3Service.uploadFile(request.getImage(), savePath);
                 user.setProfileImage(savePath);
@@ -86,5 +99,12 @@ public class UserService {
             return PostEditUserProfileImageRes.toDto(user);
         }
         return null;
+    }
+
+    public PostLoginRes login(PostLoginReq request) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        User user = (User)authentication.getPrincipal();
+        String accessToken = JwtTokenUtils.generateAccessToken(user);
+        return PostLoginRes.builder().accessToken(accessToken).build();
     }
 }

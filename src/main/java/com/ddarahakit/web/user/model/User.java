@@ -27,8 +27,6 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
@@ -45,10 +43,14 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String authority;
 
+    @ColumnDefault("false")
+    private boolean enabled;
+
     @Column(updatable = false, nullable = false)
     private Date createdAt;
 
     private Date updatedAt;
+
 
 
     @PrePersist
@@ -90,6 +92,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
