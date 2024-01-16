@@ -37,9 +37,19 @@ public class JwtFilter extends OncePerRequestFilter {
 
         Long id = jwtTokenUtils.getId(token);
         String name = jwtTokenUtils.getName(token);
-        String role = jwtTokenUtils.getRole(token);
+        String roles = jwtTokenUtils.getRoles(token);
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(role));
+
+        // TODO : 나중에 권한 로직 변경할 것
+        if(roles.contains(",")) {
+            for (String role:roles.split(",")) {
+                authorities.add(new SimpleGrantedAuthority(role));
+            }
+        } else {
+            authorities.add(new SimpleGrantedAuthority(roles));
+        }
+
+
 
 
 

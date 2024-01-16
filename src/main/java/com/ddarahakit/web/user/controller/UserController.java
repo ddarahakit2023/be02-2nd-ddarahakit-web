@@ -32,6 +32,13 @@ public class UserController {
 
     private final UserService userService;
 
+    @ApiOperation(value = "선생님 회원가입")
+    @RequestMapping(method = RequestMethod.POST, value = "/signup/teacher")
+    public ResponseEntity signupTeacher(@Valid @RequestBody PostSignupReq request) {
+        PostSignupRes response = userService.signupTeacher(request);
+        return ResponseEntity.ok().body(response);
+    }
+
     @ApiOperation(value = "회원가입")
     @RequestMapping(method = RequestMethod.POST, value = "/signup")
     public ResponseEntity signup(@Valid @RequestBody PostSignupReq request) {
@@ -62,8 +69,15 @@ public class UserController {
 
     @ApiOperation(value = "일반 사용자 권한 테스트용")
     @RequestMapping(method = RequestMethod.GET, value = "/test")
-    public ResponseEntity test(@AuthenticationPrincipal User user) {
-        
+    public ResponseEntity testUser(@AuthenticationPrincipal User user) {
+
         return ResponseEntity.ok().body(user.getName() + " 사용자 성공");
+    }
+
+    @ApiOperation(value = "선생님 사용자 권한 테스트용")
+    @RequestMapping(method = RequestMethod.GET, value = "/test/teacher")
+    public ResponseEntity testTeacher(@AuthenticationPrincipal User user) {
+
+        return ResponseEntity.ok().body(user.getName() + " 선생님 사용자 성공");
     }
 }

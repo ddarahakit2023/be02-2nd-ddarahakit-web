@@ -43,7 +43,7 @@ public class JwtTokenUtils {
         Claims claims = Jwts.claims();
         claims.put("id", user.getId());
         claims.put("name", user.getName());
-        claims.put("role", user.getAuthority());
+        claims.put("roles", user.getAuthority());
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -81,9 +81,9 @@ public class JwtTokenUtils {
 
         return name;
     }
-    public static String getRole(String token) {
-        String role = getClaims(token).get("role", String.class);
+    public static String getRoles(String token) {
+        String roles = getClaims(token).get("roles", String.class);
 
-        return role;
+        return roles;
     }
 }

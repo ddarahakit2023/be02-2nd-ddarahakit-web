@@ -57,6 +57,39 @@ public class UserService {
                 .build();
     }
 
+    public PostSignupRes signupTeacher(PostSignupReq request) {
+        Optional<User> result = userRepository.findByEmail(request.getEmail());
+
+        if (result.isPresent()) {
+            User user = result.get();
+            if(user.getAuthority().contains("ROLE_TEACHER")) {
+                throw new MemberException(ErrorCode.DUPLICATED_USER, String.format("email is %s", request.getEmail()));
+            } else {
+                user.setAuthority(user.getAuthority()+",ROLE_TEACHER");
+                user = userRepository.save(user);
+                return PostSignupRes.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .name(user.getName())
+                        .build();
+            }
+        }
+
+        User user = User.builder()
+                .email(request.getEmail())
+                .name(request.getName())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .authority("ROLE_TEACHER")
+                .build();
+
+        user = userRepository.save(user);
+
+        return PostSignupRes.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .build();
+    }
 
     public PutEditUserProfileRes editUserProfile(PutEditUserProfileReq request) {
         Optional<User> result = userRepository.findById(request.getId());
@@ -103,7 +136,7 @@ public class UserService {
 
     public PostLoginRes login(PostLoginReq request) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        User user = (User)authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
         String accessToken = JwtTokenUtils.generateAccessToken(user);
         return PostLoginRes.builder().accessToken(accessToken).build();
     }
