@@ -4,8 +4,10 @@ import com.ddarahakit.web.course.model.request.PostCourseReq;
 import com.ddarahakit.web.course.model.response.GetCourseRes;
 import com.ddarahakit.web.course.model.response.PostCourseRes;
 import com.ddarahakit.web.course.service.CourseService;
+import com.ddarahakit.web.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +19,9 @@ public class CourseController {
     private final CourseService courseService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/create")
-    public ResponseEntity createCourse(@RequestBody PostCourseReq request) {
-        PostCourseRes response = courseService.createCourse(request);
+    public ResponseEntity createCourse(@AuthenticationPrincipal User user, @RequestBody PostCourseReq request) {
+
+        PostCourseRes response = courseService.createCourse(user, request);
 
         return ResponseEntity.ok().body(response);
     }

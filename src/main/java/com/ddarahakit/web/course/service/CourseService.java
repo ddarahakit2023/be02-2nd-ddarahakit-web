@@ -15,6 +15,7 @@ import com.ddarahakit.web.course.repository.LectureRepository;
 import com.ddarahakit.web.course.repository.SectionRepository;
 import com.ddarahakit.web.exception.ErrorCode;
 import com.ddarahakit.web.exception.exception.CourseException;
+import com.ddarahakit.web.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ public class CourseService {
     private final SectionRepository sectionRepository;
     private final LectureRepository lectureRepository;
 
-    public PostCourseRes createCourse(PostCourseReq request) {
+    public PostCourseRes createCourse(User user, PostCourseReq request) {
         Optional<Course> result = courseRepository.findByName(request.getName());
 
         if (result.isPresent()) {
@@ -42,6 +43,7 @@ public class CourseService {
                 .image(request.getImage())
                 .description(request.getDescription())
                 .price(request.getPrice())
+                .user(user)
                 .build();
 
         course = courseRepository.save(course);

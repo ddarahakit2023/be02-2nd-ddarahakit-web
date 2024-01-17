@@ -1,10 +1,12 @@
 package com.ddarahakit.web.course.model;
 
+import com.ddarahakit.web.user.model.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import java.lang.reflect.Member;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -37,6 +39,10 @@ public class Course {
     @ColumnDefault("1")
     private Boolean isDisplay;
 
+    @ManyToOne
+    @JoinColumn(name = "User_id")
+    private User user;
+
     @Column(updatable = false, nullable = false)
     private Date createdAt;
 
@@ -56,5 +62,6 @@ public class Course {
     void updatedAt() {
         this.updatedAt = Timestamp.from(Instant.now());
     }
+
 
 }
