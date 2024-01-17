@@ -1,5 +1,6 @@
 package com.ddarahakit.web.user.model;
 
+import com.ddarahakit.web.order.model.Orders;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -12,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Getter
@@ -45,6 +44,7 @@ public class User implements UserDetails {
 
     @ColumnDefault("false")
     private boolean enabled;
+
 
     @Column(updatable = false, nullable = false)
     private Date createdAt;

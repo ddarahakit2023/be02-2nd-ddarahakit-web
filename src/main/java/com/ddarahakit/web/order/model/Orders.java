@@ -6,7 +6,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +29,9 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "User_id")
     private User user;
+
+    @OneToMany(mappedBy = "orders")
+    List<OrderCourse> orderCourseList = new ArrayList<>();
 
     @PrePersist
     void createdAt() {
