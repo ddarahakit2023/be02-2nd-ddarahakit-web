@@ -1,7 +1,6 @@
 package com.ddarahakit.web.order.model;
 
 import com.ddarahakit.web.course.model.Course;
-import com.ddarahakit.web.user.model.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrdersCourse {
+public class OrderCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -39,6 +39,7 @@ public class SecurityConfig {
                     .antMatchers("/user/test").hasRole("USER")
                     .antMatchers("/user/test/teacher").hasRole("TEACHER")
                     .antMatchers("/course/create").hasRole("TEACHER")
+                    .antMatchers("/order/create").hasRole("USER")
                     .antMatchers("/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
